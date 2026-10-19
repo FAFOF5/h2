@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الرياضيات التفاعلي - الجزء الثاني (التكرار والإتقان)</title>
+    <!-- Google Fonts for typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #dbeafe;
+            --accent: #4f46e5;
+            --success: #16a34a;
+            --success-light: #f0fdf4;
+            --danger: #dc2626;
+            --danger-light: #fef2f2;
+            --warning: #d97706;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 12px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* Top Header Card */
+        .quiz-header {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            color: white;
+            padding: 32px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .quiz-title {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .quiz-subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .student-info {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 16px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .student-info label {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .student-info input {
+            width: 100%;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        /* Sticky Progress Bar */
+        .progress-card {
+            position: sticky;
+            top: 12px;
+            z-index: 100;
+            background: var(--card-bg);
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0284c7, #16a34a);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        /* Section Cards */
+        .section-header {
+            background: #0f172a;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-tag {
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+
+        .question-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .question-num {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 800;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 15px;
+        }
+
+        .question-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+            padding-top: 2px;
+        }
+
+        .math-expr {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            direction: ltr;
+            display: inline-block;
+            font-weight: bold;
+            color: #0f172a;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 1.05em;
+        }
+
+        /* Options Grid / List */
+        .options-container {
+            display: grid;
+            gap: 10px;
+        }
+
+        .options-grid-2x2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+
+        .option-label:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .option-label input[type="radio"] {
+            margin-left: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .option-text {
+            font-size: 15px;
+            font-weight: 500;
+            flex-grow: 1;
+        }
+
+        /* Feedback Box */
+        .feedback-box {
+            margin-top: 16px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-light);
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-light);
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: #334155;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 10px;
+            border-radius: 8px;
+            border-right: 4px solid var(--primary);
+        }
+
+        .btn-check-item {
+            margin-top: 12px;
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-check-item:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Action Buttons */
+        .actions-footer {
+            margin-top: 32px;
+            margin-bottom: 48px;
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 16px 36px;
+            font-size: 18px;
+            font-weight: 800;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3);
+        }
+
+        /* Result Banner */
+        .result-banner {
+            display: none;
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 3px solid var(--primary);
+            margin-bottom: 32px;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            70% { transform: scale(1.02); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 12px 0;
+        }
+
+        .result-message {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 16px;
+        }
+
+        .stars {
+            font-size: 32px;
+            color: #f59e0b;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .options-grid-2x2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header Card -->
+    <header class="quiz-header">
+        <h1 class="quiz-title">📝 نموذج الرياضيات التفاعلي - الصفحة الثانية</h1>
+        <p class="quiz-subtitle">تدرب واختبر نفسك حتى تتقن جميع أسئلة المعادلة، القيمة المطلقة، والمجال والمتتابعات!</p>
+        <div class="student-info">
+            <label for="studentName">اسم الطالب:</label>
+            <input type="text" id="studentName" placeholder="اكتب اسمك هنا للبدء..." value="محمد">
+        </div>
+    </header>
+
+    <!-- Progress Indicator -->
+    <div class="progress-card">
+        <span class="progress-text">التقدم: <span id="answeredCount">0</span> / 8 أسئلة</span>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <span class="progress-text" id="scoreDisplay">الدرجة: -</span>
+    </div>
+
+    <!-- Final Result Banner -->
+    <div class="result-banner" id="resultBanner">
+        <div class="stars" id="resultStars">⭐⭐⭐⭐⭐</div>
+        <h2 class="result-message" id="resultMsg">ممتاز جداً! أداء رائع!</h2>
+        <div class="result-score" id="finalScore">6 / 6</div>
+        <p id="resultDetail">لقد أجبت على جميع الأسئلة بنجاح. يمكنك إعادة الاختبار للتدريب والتثبيت!</p>
+        <button class="btn-action btn-reset" style="margin-top:20px;" onclick="resetQuiz()">🔄 إعادة الاختبار للتكرار والإتقان</button>
+    </div>
+
+    <form id="quizForm" onsubmit="return false;">
+
+        <!-- SECTION 4: Multiple Choice -->
+        <div class="section-header">
+            <span>السؤال الرابع: اختر الإجابة الصحيحة فيما يلي</span>
+            <span class="section-tag">6 فقرات - (3 درجات)</span>
+        </div>
+
+        <!-- Q1 -->
+        <div class="question-card" id="qCard-q1">
+            <div class="question-header">
+                <div class="question-num">1</div>
+                <div class="question-text">
+                    مجموعة حل المعادلة <span class="math-expr">5س - 7 = 18</span> في مجموعة التعويض <span class="math-expr">{1, 2, 3, 5}</span> هو:
+                </div>
+            </div>
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q1" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) { 1 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) { 2 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) { 3 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q1" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) { 5 }</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q1')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q1"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card" id="qCard-q2">
+            <div class="question-header">
+                <div class="question-num">2</div>
+                <div class="question-text">
+                    مجموعة حل المعادلة: <span class="math-expr">|2س - 1| = 11</span> هي:
+                </div>
+            </div>
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q2" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) { 2 , 3 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q2" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) ∅ (المجموعة الخالية)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q2" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) { 3 , 6 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q2" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) { -5 , 6 }</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q2')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q2"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card" id="qCard-q3">
+            <div class="question-header">
+                <div class="question-num">3</div>
+                <div class="question-text">
+                    في العلاقة <span class="math-expr">{(7, 4), (2, 7), (3, 8), (8, 7)}</span> قيمة المجال هي:
+                </div>
+            </div>
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q3" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) { 7 , 2 , 3 , 8 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q3" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) { 4 , 7 , 8 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q3" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) { 2 , 5 }</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q3" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) { 5 , 7 , 3 }</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q3')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q3"></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card" id="qCard-q4">
+            <div class="question-header">
+                <div class="question-num">4</div>
+                <div class="question-text">
+                    معادلة القيمة المطلقة التي تعبر عن التمثيل البياني التالي هي:
+                </div>
+            </div>
+
+            <!-- SVG Number line representation -->
+            <div style="text-align:center; margin-bottom:16px; background:#ffffff; padding:12px; border-radius:12px; border:1px solid #cbd5e1;">
+                <svg width="100%" height="90" viewBox="0 0 500 90" preserveAspectRatio="xMidYMid meet">
+                    <!-- Line -->
+                    <line x1="30" y1="45" x2="470" y2="45" stroke="#1e293b" stroke-width="3" />
+                    <!-- Arrowheads -->
+                    <polygon points="20,45 32,40 32,50" fill="#1e293b"/>
+                    <polygon points="480,45 468,40 468,50" fill="#1e293b"/>
+
+                    <!-- Ticks & Labels -->
+                    <!-- -10 --> <line x1="50" y1="38" x2="50" y2="52" stroke="#64748b" stroke-width="2"/><text x="50" y="70" font-size="12" text-anchor="middle">-10</text>
+                    <!-- -9 (Marked X) --> <line x1="75" y1="40" x2="75" y2="50" stroke="#cbd5e1" stroke-width="1.5"/>
+                    <text x="75" y="32" font-size="18" font-weight="900" fill="#dc2626" text-anchor="middle">✕</text>
+                    
+                    <!-- -8 --> <line x1="100" y1="38" x2="100" y2="52" stroke="#64748b" stroke-width="2"/><text x="100" y="70" font-size="12" text-anchor="middle">-8</text>
+                    <!-- -6 --> <line x1="150" y1="38" x2="150" y2="52" stroke="#64748b" stroke-width="2"/><text x="150" y="70" font-size="12" text-anchor="middle">-6</text>
+                    <!-- -4 --> <line x1="200" y1="38" x2="200" y2="52" stroke="#64748b" stroke-width="2"/><text x="200" y="70" font-size="12" text-anchor="middle">-4</text>
+                    <!-- -3 (Midpoint) --> <circle cx="225" cy="45" r="3" fill="#94a3b8"/>
+                    
+                    <!-- -2 --> <line x1="250" y1="38" x2="250" y2="52" stroke="#64748b" stroke-width="2"/><text x="250" y="70" font-size="12" text-anchor="middle">-2</text>
+                    <!-- 0 --> <line x1="300" y1="35" x2="300" y2="55" stroke="#1e293b" stroke-width="3"/><text x="300" y="72" font-size="13" font-weight="bold" text-anchor="middle">0</text>
+                    <!-- 2 --> <line x1="350" y1="38" x2="350" y2="52" stroke="#64748b" stroke-width="2"/><text x="350" y="70" font-size="12" text-anchor="middle">2</text>
+                    
+                    <!-- 3 (Marked Point) --> <circle cx="375" cy="45" r="7" fill="#2563eb"/>
+                    <text x="375" y="25" font-size="12" font-weight="bold" fill="#2563eb" text-anchor="middle">3</text>
+                    
+                    <!-- 4 --> <line x1="400" y1="38" x2="400" y2="52" stroke="#64748b" stroke-width="2"/><text x="400" y="70" font-size="12" text-anchor="middle">4</text>
+                    <!-- 6 --> <line x1="450" y1="38" x2="450" y2="52" stroke="#64748b" stroke-width="2"/><text x="450" y="70" font-size="12" text-anchor="middle">6</text>
+                </svg>
+            </div>
+
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q4" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) <span class="math-expr">|س - 3| = 6</span></span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q4" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) <span class="math-expr">|س - 6| = 3</span></span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q4" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) <span class="math-expr">|س + 3| = -6</span></span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q4" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) <span class="math-expr">|س + 3| = 6</span></span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q4')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q4"></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-card" id="qCard-q5">
+            <div class="question-header">
+                <div class="question-num">5</div>
+                <div class="question-text">
+                    معدل التغير الممثل في الجدول المقابل يساوي:
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x:auto; margin-bottom:16px;">
+                <table style="width:100%; border-collapse:collapse; text-align:center; background:#f8fafc; border:2px solid #cbd5e1; border-radius:8px;">
+                    <tr style="background:#e2e8f0; font-weight:bold;">
+                        <td style="padding:10px; border:1px solid #cbd5e1; background:#dbeafe;">س</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">3</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">1</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">6</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px; border:1px solid #cbd5e1; font-weight:bold; background:#dbeafe;">ص</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">5</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">7</td>
+                        <td style="padding:10px; border:1px solid #cbd5e1;">9</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q5" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) 5 / 2</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q5" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) -2 / 5</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q5" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) 2 / 5</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q5" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) -5 / 2</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q5')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q5"></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card" id="qCard-q6">
+            <div class="question-header">
+                <div class="question-num">6</div>
+                <div class="question-text">
+                    ميل المستقيم المجاور بالرسم البياني يكون:
+                </div>
+            </div>
+
+            <!-- Line graph svg -->
+            <div style="text-align:center; margin-bottom:16px; background:#ffffff; padding:12px; border-radius:12px; border:1px solid #cbd5e1;">
+                <svg width="200" height="150" viewBox="0 0 200 150">
+                    <!-- Grid & Axes -->
+                    <path d="M 20,75 L 180,75 M 100,10 L 100,140" stroke="#334155" stroke-width="2"/>
+                    <path d="M 20,35 H 180 M 20,115 H 180 M 60,10 V 140 M 140,10 V 140" stroke="#e2e8f0" stroke-width="1"/>
+                    <!-- Falling line -->
+                    <line x1="30" y1="25" x2="170" y2="125" stroke="#dc2626" stroke-width="3.5" marker-end="url(#arrow)"/>
+                    <circle cx="100" cy="75" r="4" fill="#0f172a"/>
+                </svg>
+            </div>
+
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q6" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) سـالـب</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q6" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) مـوجـب</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q6" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) صـفـر</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q6" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) غـيـر معـرّف</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q6')">💡 تحقق من الإجابة والتوضيح</button>
+            <div class="feedback-box" id="feedback-q6"></div>
+        </div>
+
+
+        <!-- SECTION 5: Written Questions -->
+        <div class="section-header">
+            <span>السؤال الخامس: الأسئلة المقالية وتفسير العلاقات</span>
+            <span class="section-tag">فقرتان - (3 درجات)</span>
+        </div>
+
+        <!-- Q7 (Q5-A) -->
+        <div class="question-card" id="qCard-q7">
+            <div class="question-header">
+                <div class="question-num">أ</div>
+                <div class="question-text">
+                    هل المخطط السهمي المجاور يمثل دالة أم لا ؟ فسّر إجابتك:
+                </div>
+            </div>
+
+            <!-- Mapping Diagram SVG -->
+            <div style="text-align:center; margin-bottom:16px;">
+                <svg width="220" height="150" viewBox="0 0 220 150">
+                    <!-- Ovals -->
+                    <rect x="20" y="10" width="55" height="130" rx="25" fill="#f1f5f9" stroke="#0284c7" stroke-width="2"/>
+                    <rect x="145" y="10" width="55" height="130" rx="25" fill="#f1f5f9" stroke="#0284c7" stroke-width="2"/>
+                    <text x="47" y="30" font-size="13" font-weight="bold" fill="#0284c7" text-anchor="middle">المجال</text>
+                    <text x="172" y="30" font-size="13" font-weight="bold" fill="#0284c7" text-anchor="middle">المدى</text>
+
+                    <!-- Domain Elements -->
+                    <text x="47" y="55" font-size="13" font-weight="bold" text-anchor="middle">4</text>
+                    <text x="47" y="78" font-size="13" font-weight="bold" text-anchor="middle">-2</text>
+                    <text x="47" y="101" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+                    <text x="47" y="124" font-size="13" font-weight="bold" text-anchor="middle">0</text>
+
+                    <!-- Range Elements -->
+                    <text x="172" y="55" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+                    <text x="172" y="88" font-size="13" font-weight="bold" text-anchor="middle">-1</text>
+                    <text x="172" y="118" font-size="13" font-weight="bold" text-anchor="middle">-4</text>
+
+                    <!-- Arrows -->
+                    <!-- 4 -> -1 -->
+                    <line x1="57" y1="55" x2="158" y2="85" stroke="#dc2626" stroke-width="2"/>
+                    <!-- -2 -> -1 -->
+                    <line x1="57" y1="78" x2="158" y2="87" stroke="#dc2626" stroke-width="2"/>
+                    <!-- 2 -> -4 -->
+                    <line x1="57" y1="101" x2="158" y2="116" stroke="#dc2626" stroke-width="2"/>
+                    <!-- 0 -> -4 -->
+                    <line x1="57" y1="124" x2="158" y2="118" stroke="#dc2626" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q7" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) نعم، لأن كل عنصر في المجال ارتبط بعنصر واحد فقط في المدى.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q7" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) لا، لأن العنصر -1 ارتبط بعنصرين من المجال.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q7" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) لا، لأن المدى يقل عن المجال في عدد العناصر.</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q7')">💡 تحقق من الإجابة والتفسير</button>
+            <div class="feedback-box" id="feedback-q7"></div>
+        </div>
+
+        <!-- Q8 (Q5-B) -->
+        <div class="question-card" id="qCard-q8">
+            <div class="question-header">
+                <div class="question-num">ب</div>
+                <div class="question-text">
+                    في المتتابعة الحسابية <span class="math-expr">( -10 , -2 , 6 , 14 , ...... )</span> صيغة الحد النوني (<span class="math-expr">أ_ن</span>) هي:
+                </div>
+            </div>
+
+            <div class="options-container options-grid-2x2">
+                <label class="option-label">
+                    <input type="radio" name="q8" value="A" onchange="updateProgress()">
+                    <span class="option-text">أ) أ_ن = 8ن - 18</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q8" value="B" onchange="updateProgress()">
+                    <span class="option-text">ب) أ_ن = -10ن + 8</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q8" value="C" onchange="updateProgress()">
+                    <span class="option-text">ج) أ_ن = 8ن + 10</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="q8" value="D" onchange="updateProgress()">
+                    <span class="option-text">د) أ_ن = -18ن - 8</span>
+                </label>
+            </div>
+            <button type="button" class="btn-check-item" onclick="checkSingle('q8')">💡 تحقق من خطوة بخطوة وإجابة الحد النوني</button>
+            <div class="feedback-box" id="feedback-q8"></div>
+        </div>
+
+        <!-- Action Footer Bar -->
+        <div class="actions-footer">
+            <button type="button" class="btn-action btn-submit" onclick="submitQuiz()">✅ تسليم الاختبار وعرض النتيجة النهائيّة</button>
+            <button type="button" class="btn-action btn-reset" onclick="resetQuiz()">🔄 إعادة المحاولة للتدريب والاتقان</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Answer Key & Explanations for Page 2
+    const quizData = {
+        q1: {
+            correct: 'D',
+            explain: 'نعوض بقيم مجموعة التعويض في المعادلة 5س - 7 = 18:\n• عندما س = 5: 5(5) - 7 = 25 - 7 = 18 (صحيحة!).\nإذن مجموعة الحل هي { 5 }.'
+        },
+        q2: {
+            correct: 'D',
+            explain: 'بفك معادلة القيمة المطلقة إلى حالتين:\n1) 2س - 1 = 11  ⇐  2س = 12  ⇐  س = 6\n2) 2س - 1 = -11 ⇐  2س = -10 ⇐  س = -5\nمجموعة الحل هي { -5 , 6 }.'
+        },
+        q3: {
+            correct: 'A',
+            explain: 'المجال هو مجموعة المساقط الأولى (قيم س) في الأزواج المرتبة: (7, 2, 3, 8). بينما المدى هو المساقط الثانية {4, 7, 8}.'
+        },
+        q4: {
+            correct: 'D',
+            explain: 'نحدد نقطة المنتصف بين النقطتين المعطاتين (-9 و 3): (-9 + 3) ÷ 2 = -3.\nالمسافة من المنتصف إلى أي من النقطتين = 6 وحدات.\nمعادلة القيمة المطلقة هي: |س - (-3)| = 6 أي |س + 3| = 6.'
+        },
+        q5: {
+            correct: 'C',
+            explain: 'معدل التغير = (التغير في ص) ÷ (التغير في س) = (9 - 7) ÷ (6 - 1) = 2 ÷ 5 = 2 / 5.'
+        },
+        q6: {
+            correct: 'A',
+            explain: 'بما أن المستقيم ينحدر ويتجه للأسفل من اليسار إلى اليمين، فإن ميل المستقيم يكون ســالبـاً.'
+        },
+        q7: {
+            correct: 'A',
+            explain: 'نعم تمثل دالة، لأن شرط الدالة يتطلب فقط أن يخرج من كل عنصر في "المجال" سهم واحد فقط، ولا يضر إذا اشترك أكثر من عنصر في نفس العنصر بـ "المدى".'
+        },
+        q8: {
+            correct: 'A',
+            explain: 'خطوات استنتاج الحد النوني:\n1) الحد الأول أ1 = -10\n2) الأساس د = -2 - (-10) = 8\n3) القانون: أ_ن = أ1 + (ن - 1) × د\n4) أ_ن = -10 + (ن - 1) × 8 = -10 + 8ن - 8 = 8ن - 18.'
+        }
+    };
+
+    const totalQuestions = 8;
+
+    function updateProgress() {
+        let answered = 0;
+        for (let i = 1; i <= totalQuestions; i++) {
+            const qKey = 'q' + i;
+            const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+            if (selected) answered++;
+        }
+        document.getElementById('answeredCount').innerText = answered;
+        const percent = Math.round((answered / totalQuestions) * 100);
+        document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function checkSingle(qKey) {
+        const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+        const feedbackEl = document.getElementById(`feedback-${qKey}`);
+        const data = quizData[qKey];
+
+        if (!selected) {
+            feedbackEl.className = 'feedback-box incorrect';
+            feedbackEl.innerHTML = '⚠️ الرجاء اختيار إجابة أولاً للتحقق!';
+            return;
+        }
+
+        if (selected.value === data.correct) {
+            feedbackEl.className = 'feedback-box correct';
+            feedbackEl.innerHTML = `🎉 <strong>إجابة صحيحة! أحسنت!</strong><div class="explanation">💡 <strong>الشرح وتفاصيل الحل:</strong><br>${data.explain.replace(/\n/g, '<br>')}</div>`;
+        } else {
+            feedbackEl.className = 'feedback-box incorrect';
+            feedbackEl.innerHTML = `❌ <strong>إجابة غير صحيحة. حاول مرة أخرى!</strong><div class="explanation">💡 <strong>التوضيح وفكرة الحل:</strong><br>${data.explain.replace(/\n/g, '<br>')}</div>`;
+        }
+    }
+
+    function submitQuiz() {
+        let score = 0;
+        let answered = 0;
+
+        for (let i = 1; i <= totalQuestions; i++) {
+            const qKey = 'q' + i;
+            const selected = document.querySelector(`input[name="${qKey}"]:checked`);
+            const data = quizData[qKey];
+            const feedbackEl = document.getElementById(`feedback-${qKey}`);
+
+            if (selected) {
+                answered++;
+                if (selected.value === data.correct) {
+                    score++;
+                    feedbackEl.className = 'feedback-box correct';
+                    feedbackEl.innerHTML = `🎉 <strong>إجابة صحيحة!</strong><div class="explanation">💡 ${data.explain.replace(/\n/g, '<br>')}</div>`;
+                } else {
+                    feedbackEl.className = 'feedback-box incorrect';
+                    feedbackEl.innerHTML = `❌ <strong>إجابة خاطئة. الإجابة الصحيحة هي (${data.correct}).</strong><div class="explanation">💡 ${data.explain.replace(/\n/g, '<br>')}</div>`;
+                }
+            } else {
+                feedbackEl.className = 'feedback-box incorrect';
+                feedbackEl.innerHTML = `⚠️ لم يتم الإجابة على هذا السؤال.<div class="explanation">💡 الإجابة الصحيحة: ${data.correct}. <br>${data.explain.replace(/\n/g, '<br>')}</div>`;
+            }
+        }
+
+        const name = document.getElementById('studentName').value.trim() || 'الطالب';
+        const banner = document.getElementById('resultBanner');
+        const scoreDisplay = document.getElementById('finalScore');
+        const msgDisplay = document.getElementById('resultMsg');
+        const starsDisplay = document.getElementById('resultStars');
+        const detailDisplay = document.getElementById('resultDetail');
+
+        scoreDisplay.innerText = `${score} / ${totalQuestions}`;
+        document.getElementById('scoreDisplay').innerText = `الدرجة: ${score} / ${totalQuestions}`;
+
+        const percentage = (score / totalQuestions) * 100;
+
+        if (percentage === 100) {
+            starsDisplay.innerText = '⭐⭐⭐⭐⭐';
+            msgDisplay.innerText = `بطل الرياضيات! أداء ممتاز جداً يا ${name}! 🏆`;
+            detailDisplay.innerText = 'ما شاء الله! أتقنت جميع أسئلة الصفحة الثانية بنسبة 100%. أهنئك على هذا المستوى!';
+        } else if (percentage >= 75) {
+            starsDisplay.innerText = '⭐⭐⭐⭐';
+            msgDisplay.innerText = `رائع جداً يا ${name}! إنجاز ممتااااز! 👍`;
+            detailDisplay.innerText = 'اجتزت معظم الأسئلة بنجاح. يمكنك مراجعة الشرح القصير للأخطاء وإعادة المحاولة للوصول إلى الدرجة الكاملة.';
+        } else if (percentage >= 50) {
+            starsDisplay.innerText = '⭐⭐⭐';
+            msgDisplay.innerText = `جهد طيب يا ${name}! واصل المحاولة! 💪`;
+            detailDisplay.innerText = 'أنت قريب جداً من الإتقان. اقرأ التوضيحات المكتوبة أسفل الأسئلة واضغط "إعادة المحاولة" لتكرار الاختبار.';
+        } else {
+            starsDisplay.innerText = '⭐⭐';
+            msgDisplay.innerText = `لا تستسلم يا ${name}! بالتكرار يسهل الصعب! 🚀`;
+            detailDisplay.innerText = 'راجع الشرح المكتوب تحت كل سؤال بتمعن ثم أعد المحاولة، وسوف تتجاوزها بسهولة إن شاء الله!';
+        }
+
+        banner.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+        document.getElementById('quizForm').reset();
+
+        const feedbacks = document.querySelectorAll('.feedback-box');
+        feedbacks.forEach(f => {
+            f.style.display = 'none';
+            f.className = 'feedback-box';
+            f.innerHTML = '';
+        });
+
+        document.getElementById('resultBanner').style.display = 'none';
+
+        document.getElementById('answeredCount').innerText = '0';
+        document.getElementById('progressBar').style.width = '0%';
+        document.getElementById('scoreDisplay').innerText = 'الدرجة: -';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
